@@ -1,0 +1,9 @@
+{
+	"name": "mpz-data-factory",
+	"location": "eastus",
+	"identity": {
+		"type": "SystemAssigned",
+		"principalId": "61f5dc2d-c64b-4da8-97cb-5079e2c85395",
+		"tenantId": "54e7375e-bb0b-43b3-8c77-7cc6bc6c5078"
+	}
+}

@@ -1,0 +1,73 @@
+{
+	"name": "first_data_flow",
+	"properties": {
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "input_dataset",
+						"type": "DatasetReference"
+					},
+					"name": "fromcsv"
+				}
+			],
+			"sinks": [
+				{
+					"dataset": {
+						"referenceName": "output_dataset_Parquet",
+						"type": "DatasetReference"
+					},
+					"name": "outputsink",
+					"rejectedDataLinkedService": {
+						"referenceName": "Liinked_Service_Data_Lake_Storage",
+						"type": "LinkedServiceReference"
+					}
+				}
+			],
+			"transformations": [
+				{
+					"name": "update"
+				},
+				{
+					"name": "specificcolumns"
+				}
+			],
+			"scriptLines": [
+				"source(output(",
+				"          EmployeeID as string,",
+				"          Name as string,",
+				"          Department as string,",
+				"          Salary as string",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false) ~> fromcsv",
+				"fromcsv derive(NameLength = length(Name),",
+				"          firstname = split(Name, ' ')[1],",
+				"          lastname = split(Name, ' ')[2],",
+				"          Fullname = concat(split(Name, ' ')[1], ' swami ', split(Name, ' ')[2])) ~> update",
+				"update select(mapColumn(",
+				"          EmployeeID,",
+				"          Fullname,",
+				"          Department,",
+				"          Salary,",
+				"          NameLength,",
+				"          firstname,",
+				"          lastname",
+				"     ),",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> specificcolumns",
+				"specificcolumns sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     format: 'parquet',",
+				"     truncate: true,",
+				"     umask: 0777,",
+				"     preCommands: [],",
+				"     postCommands: [],",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> outputsink"
+			]
+		}
+	}
+}

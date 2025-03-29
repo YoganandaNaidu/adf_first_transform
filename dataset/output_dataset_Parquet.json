@@ -1,0 +1,20 @@
+{
+	"name": "output_dataset_Parquet",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "Liinked_Service_Data_Lake_Storage",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "Parquet",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobFSLocation",
+				"fileSystem": "gold"
+			},
+			"compressionCodec": "snappy"
+		},
+		"schema": []
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}
